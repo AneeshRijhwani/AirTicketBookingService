@@ -1,8 +1,21 @@
 const { BookingService } = require('../services/index');
 const { StatusCodes } = require('http-status-codes');
 const bookingService = new BookingService();
+const { createChannel, publishMessage } = require('../utils/messageQueue');
+const { REMINDER_BINDING_KEY } = require('../config/serverConfig');
+class BookingController {
+    constructor(){
 
-class BookingContoller {
+    }
+    
+    async sendMessageToQueue(req, res) {
+        const channel = await createChannel();
+        const data = {message: 'Success'}
+        publishMessage(channel, REMINDER_BINDING_KEY, JSON.stringify(data));
+        return res.status(200).json({
+            message: 'Successfully published the event'
+        });
+    }
     async create (req,res) { 
         try {
             const response = await bookingService.createBooking(req.body);
@@ -25,4 +38,4 @@ class BookingContoller {
 
 
 
-module.exports = BookingContoller;
+module.exports = BookingController;
