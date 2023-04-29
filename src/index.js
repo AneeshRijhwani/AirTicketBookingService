@@ -4,7 +4,6 @@ const app = express();
 const apiRoutes = require('./routes/index');
 const db = require('./models/index');
 const {PORT} = require('./config/serverConfig');
-
 const setupAndStartServer = ()=>{
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended:true}));
